@@ -21,7 +21,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "better-config": "^1.2.3",
+    "better-config": "^1.1.0",
     "bluebird": "^3.5.5",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -29,7 +29,7 @@
     "express-validator": "^6.0.0",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
-    "redis": "^2.8.0",
+    "redis": "^4.5.1",
     "round-to": "^4.0.0",
     "shortid": "^2.2.14",
     "winston": "^3.2.1"
