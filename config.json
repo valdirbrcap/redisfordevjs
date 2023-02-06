@@ -1,6 +1,6 @@
 {
   "application": {
-    "port": 8081,
+    "port": 9081,
     "logLevel": "debug",
     "dataStore": "redis"
   },
