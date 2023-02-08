@@ -12,3 +12,6 @@ npm run test -t sitestats_dao_redis_impl
 
 4o. Challenge
 npm run test -t capacity_dao_redis_impl
+
+5o. Challenge
+npm run test -t site_geo_dao_redis_impl

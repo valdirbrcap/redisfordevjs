@@ -114,12 +114,32 @@ const findAll = async () => {
   const siteIds = await client.zrangeAsync(keyGenerator.getSiteGeoKey(), 0, -1);
   const sites = [];
 
+  // OPTIONAL BONUS CHALLENGE: Optimize with a pipeline.
+  if (siteIds.length > 0) {
+    const pipeline = client.batch();
+
+    for (const siteId of siteIds) {
+      pipeline.hgetall(keyGenerator.getSiteHashKey(siteId));
+    }
+
+    // Get all of the site hashes in a single round trip.
+    const siteHashes = await pipeline.execAsync();
+
+    for (const siteHash of siteHashes) {
+      // Call remap to remap the flat key/value representation
+      // from the Redis hash into the site domain object format.
+      sites.push(remap(siteHash));
+    }
+  }
+
+  // anterior 
+  /*
   for (const siteId of siteIds) {
     const siteKey = keyGenerator.getSiteHashKey(siteId);
 
-    /* eslint-disable no-await-in-loop */
+    // eslint-disable no-await-in-loop 
     const siteHash = await client.hgetallAsync(siteKey);
-    /* eslint-enable */
+    // eslint-enable 
 
     if (siteHash) {
       // Call remap to remap the flat key/value representation
@@ -127,7 +147,8 @@ const findAll = async () => {
       sites.push(remap(siteHash));
     }
   }
-
+  */
+  // END OPTIONAL BONUS CHALLENGE
   return sites;
 };
 
@@ -180,7 +201,7 @@ const findByGeo = async (lat, lng, radius, radiusUnit) => {
 const findByGeoWithExcessCapacity = async (lat, lng, radius, radiusUnit) => {
   /* eslint-disable no-unreachable */
   // Challenge #5, remove the next line...
-  return [];
+  //return [];
 
   const client = redis.getClient();
 
@@ -205,6 +226,16 @@ const findByGeoWithExcessCapacity = async (lat, lng, radius, radiusUnit) => {
   const sitesInRadiusCapacitySortedSetKey = keyGenerator.getTemporaryKey();
 
   // START Challenge #5
+  // Valdir
+  setOperationsPipeline.zinterstore(
+    sitesInRadiusCapacitySortedSetKey,
+    2,
+    sitesInRadiusSortedSetKey,
+    keyGenerator.getCapacityRankingKey(),
+    'WEIGHTS',
+    0,
+    1,
+  );
   // END Challenge #5
 
   // Expire the temporary sorted sets after 30 seconds, so that we
