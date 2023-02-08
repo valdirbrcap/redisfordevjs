@@ -9,3 +9,6 @@ npm run test -t lua
 
 3o. Chalenge semana 2
 npm run test -t sitestats_dao_redis_impl
+
+4o. Challenge
+npm run test -t capacity_dao_redis_impl
