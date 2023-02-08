@@ -23,6 +23,19 @@ const runApplication = async () => {
   const keyValue = await client.getAsync('hello');
   console.log(keyValue); // world
 
+  console.log("Inicio Pipeline");
+  const pipeline = client.batch();
+  const key = 'hw2.5';
+
+  pipeline.set(key, 3);
+  pipeline.incrby(key, 3);
+  pipeline.get(key);
+
+  const results = await pipeline.execAsync();
+  console.log(results);
+  console.log("Fim Pipeline");
+
+
   // Clean up and allow the script to exit.
   client.quit();
 };
